@@ -1,0 +1,190 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="1.js"></script>
+<script>
+function zhugeshow__() {
+	var y1 = document.body.scrollTop, y2 = y1 + document.body.clientHeight;
+	var imgs = e_tn__("img");
+	for(var i = 0; i < imgs.length; i++) {
+		var img = imgs[i];
+		var y = img.offsetTop;
+		if(y + img.height >= y1 && y <= y2) {
+			img.src = img.parentNode.parentNode.parentNode.title;
+		}
+	}
+}
+window.onscroll = zhugeshow__;
+window.onload = zhugeshow__;
+
+function for_tag__(f, all) {
+	var tags = e_cn__("tag");
+	for(var i = 0; i < tags.length; i++) {
+		var tag = tags[i];
+		if(tag.checked || all) {
+			f(tag);
+		}
+	}
+}
+function tag__() {
+	var s = "";
+	for_tag__(function(tag) {
+		if(s != "")
+			s += " ";
+		s += '"' + tag.nextSibling.title + '"';
+	});
+	return s;
+}
+function mv__() {
+	var s = tag__();
+	if(s == "")
+		return;
+	e__("tags").value = s;
+	window.open("mv.zsp");
+}
+function rm__() {
+	var s = tag__();
+	if(s == "")
+		return;
+	if(!confirm("删除 " + s + " 吗？"))
+		return
+	exec__("rm -r " + s, function(ret) {
+		if(ret != "") {
+			alert("删除出错");
+			return;
+		}
+		rm_sel__();
+	});
+}
+function rm_sel__() {
+	for_tag__(function(tag) {
+		var n = tag.parentNode;
+		n.parentNode.removeChild(n);
+	});
+	zhugeshow__();
+}
+function sel_all__(all) {
+	for_tag__(function(tag) {
+		tag.checked = all ? true : !tag.checked;
+	}, true);
+}
+</script>
+<%
+赋予列目录以让我得参、ls。
+
+赋予图宽以200。
+赋予框宽以1。
+赋予1宽以算术‘图宽’ + ‘框宽’ * 2。
+“<style>
+* {margin:0px;padding:0px;}
+img {
+	max-height:‘图宽’px;
+	max-width:‘图宽’px;
+	border:none;
+}
+.item {
+	float:left;
+	padding:7px;
+	display:inline-table;
+}
+.item-1 {
+	height:‘1宽’px;
+	width:‘1宽’px;
+	border:‘框宽’px dashed #000;
+	word-break:break-all;
+}
+.item-2 {
+	height:‘1宽’px;
+	width:‘1宽’px;
+	text-align:center;
+	vertical-align:middle;
+	display:table-cell;
+}
+#bar {
+	border:‘框宽’px dashed #000;
+	padding:7px;
+	position:fixed;
+	top:0px;
+	right:0px;
+	background-color:rgba(255, 255, 255, 0.65);
+}
+</style>”。
+%>
+</head>
+<body>
+<div id=bar>
+<input type=hidden id=tags>
+<a href="javascript:mv__()">移动</a> 
+<a href="javascript:rm__()">删除</a> 
+<a href="javascript:sel_all__(true)">全选</a> 
+<a href="javascript:sel_all__(false)">反选</a> 
+<a href="other.zsp">other</a> 
+</div>
+<%
+定义加链接以下代码
+	别名目标以参数1。
+	别名路径以参数2。
+	别名内容以参数3。
+	换行“<div class=item>
+	<input type=checkbox class=tag>
+	<a href="‘目标’‘路径’" target=_blank title="‘路径’">
+	<div class=item-1><div class=item-2>
+	‘内容’
+	</div></div>
+	</a>
+	</div>”。
+上代码。
+
+定义是图片以下代码
+	别名路径以参数1。
+	赋予果、错以让我重定向输出、file、‘路径’。
+	赋予果、错以让我正则配、‘果’、“JPEG image”、“GIF image”、“PNG image”、“PC bitmap”。
+	如果‘果’不等于“”那么1。
+上代码。
+
+定义加图片项以下代码
+	别名路径以参数1。
+	加链接、‘路径’、“<img src="no.png">”。
+上代码。
+
+如果‘列目录’那么先
+	让我遍历目录、‘列目录’、含子目录、下代码
+		别名名以参数1。
+		赋予路径以‘列目录’/‘名’。
+		如果是图片‘路径’那么加图片项‘路径’。
+	上代码。
+了否则先
+	如果不存在图片目录1【顶】那么先
+		如果不存在参数1【上】那么
+			赋予图片目录1【顶】以先让我得环境变量、HOME了/图片
+		否则先
+			赋予号以1。
+			循环先
+				别名图片目录以参数‘号’【上】。
+				如果不存在图片目录那么跳出。
+				赋予图片目录‘号’【顶】以‘图片目录’。
+				赋予号以算术‘号’ + 1。
+			了。
+		了。
+	了。
+	赋予号以1。
+	循环先
+		别名图片目录以图片目录‘号’【顶】。
+		如果不存在图片目录那么跳出。
+		显示‘图片目录’换行。
+		让我遍历目录、‘图片目录’、含子目录、返回目录、仅根文件、下代码
+			别名名以参数1。
+			赋予路径以‘图片目录’/‘名’。
+			如果让我尾匹配、‘名’、/那么
+				加链接?ls=、‘路径’、‘名’
+			否则先
+				如果是图片‘路径’那么
+					加图片项‘路径’。
+			了。
+		上代码。
+		赋予号以算术‘号’ + 1。
+	了。
+了。
+%>
+</body>
+</html>

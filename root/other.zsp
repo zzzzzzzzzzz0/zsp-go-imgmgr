@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="1.js"></script>
+<script>
+function z__(s) {
+	exec__(s, function(ret) {
+		e__("log").innerHTML += s + " " + ret + "<br>";
+	});
+}
+</script>
+</head>
+<body>
+<a href="javascript:z__('sudo -n poweroff')">关闭服务器（电脑）</a> 
+<a href="javascript:z__('sudo -n reboot')">重启服务器（电脑）</a> 
+<div id=log></a>
+</body>
+</html>

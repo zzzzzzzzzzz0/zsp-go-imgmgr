@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="1.js"></script>
+<script>
+function submit__(f) {
+	var dir = f.dir.value;
+	if(dir) {
+		exec__("mv -n " + o_e__("tags").value + ' "' + dir + '"', function(ret) {
+			if(ret != "") {
+				alert("移动出错");
+			} else {
+				//opener.location.reload();
+				opener.rm_sel__();
+				window.close();
+			}
+		});
+	}
+	return false;
+}
+</script>
+<style>
+#dirs {
+	border:1px dashed #000;
+	position:absolute;
+	right:0px;
+	width:50%;
+}
+#tag {
+	border:1px dashed #000;
+	position:fixed;
+	left:0px;
+	width:49%;
+}
+</style>
+</head>
+<body>
+<form onsubmit="return submit__(this)">
+<div id=tag>
+<input type=submit value="移动"> 
+<span id=tags></span> 
+到：
+</div>
+<div id=dirs>
+<%
+定义加钮以下代码
+	别名路径以参数1。
+	“<br><input type=radio name=dir value="‘路径’">‘路径’”。
+上代码。
+赋予号以1。
+循环先
+	别名图片目录以图片目录‘号’【顶】。
+	如果不存在图片目录那么跳出。
+	加钮‘图片目录’。
+	让我遍历目录、‘图片目录’、含子目录、返回目录、仅目录、下代码
+		加钮‘图片目录’/‘参数1’
+	上代码。
+	赋予号以算术‘号’ + 1。
+了。
+加载‘参数0’.setting。
+%>
+</div>
+</form>
+<script>e__("tags").innerHTML = o_e__("tags").value;</script>
+</body>
+</html>
