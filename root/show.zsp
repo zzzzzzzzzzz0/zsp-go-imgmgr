@@ -1,0 +1,141 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="1.js"></script>
+<style>
+body {margin:0; padding:0;}
+#img-1 {text-align:center;}
+#bar {
+	position:fixed;
+	z-index:1;
+	left:0;
+	top:0;
+	padding:7;
+	border:1px dashed #000;
+	background-color:rgba(255, 255, 255, 0.65);
+	text-align:center;
+}
+.btn {padding:3;}
+</style>
+</head>
+<body>
+<script>
+var i_ = <%让我得参%>, max_ = opener.img_max_;
+function z__() {
+	src_ = o_e__("i" + i_).title;
+	img_.src = src_;
+	r1__(r_ = 0);
+	document.title = src_ + " (" + i_ + " / " + max_ + ") " + old_key_;
+}
+function w_h__(w, h) {
+	e_.style.maxWidth = null;
+	e_.style.width = w;
+	e_.style.height = h;
+}
+function s__(s) {
+	w_h__((img_.width * s) + "px", (img_.height * s) + "px");
+}
+function r1__(r) {
+	e_.style.transform = "rotate(" + r + "deg)";
+}
+var r_;
+function r__() {
+	r1__(r_ += 45);
+}
+function first__() {
+	i_ = 1; z__();
+}
+function back__() {
+	i_--; z__();
+}
+function next__() {
+	i_++; z__();
+}
+function end__() {
+	i_ = max_; z__();
+}
+function rand__() {
+	i_ = Math.floor(Math.random() * max_) + 1; z__();
+}
+function quit__() {
+	window.close();
+}
+var old_key_ = "N";
+window.document.onkeydown = function(evt) {
+	var s = String.fromCharCode(evt.keyCode);
+	switch(s) {
+	case " ":
+		s = old_key_;
+		break;
+	}
+	switch(s) {
+	case "F":
+		first__();
+		break;
+	case "B":
+		old_key_ = s;
+		back__();
+		break;
+	case "N":
+		old_key_ = s;
+		next__();
+		break;
+	case "E":
+		end__();
+		break;
+	case "R":
+		old_key_ = s;
+		rand__();
+		break;
+	case "X":
+		r__();
+		break;
+	case "Q":
+		quit__();
+		break;
+	default:
+		alert(s);
+		break;
+	}
+};
+</script>
+<div id=bar>
+<%
+定义加以下代码
+	“<a href="javascript:‘参数1’"><div class=btn>‘参数2’</div></a>”
+上代码。
+加first__()、“第一页F”。
+加back__()、“上一页B”。
+加next__()、“下一页N”。
+加end__()、“最后页E”。
+加rand__()、“随机页R”。
+加z__()、刷新。
+加s__(1)、“1 : 1”。
+加s__(2)、“1 : 2”。
+加s__(0.5)、“1 : 0.5”。
+加r__()、旋转X。
+加quit__()、“结束Q”。
+删除“加”。
+%>
+</div>
+<div id=img-1><img id=img></div>
+<script>
+var src_;
+var img_ = new Image();
+var e_ = e__("img");
+img_.onload = function() {
+	e_.src = img_.src;
+	w_h__(null, null);
+	if(img_.width > document.body.clientWidth) {
+		e_.style.maxWidth = "100%";
+		e_.style.height = "auto";
+	}
+	if(img_.height > document.body.clientHeight) {
+		e_.style.maxWidth = "auto";
+		e_.style.height = "100%";
+	}
+};
+z__();
+</script>
+</body>
+</html>
