@@ -8,7 +8,6 @@ body {margin:0; padding:0;}
 #bar {
 	position:fixed;
 	z-index:1;
-	left:0;
 	top:0;
 	padding:7;
 	border:1px dashed #000;
@@ -20,45 +19,111 @@ body {margin:0; padding:0;}
 </head>
 <body>
 <script>
-var i_ = <%让我得参%>, max_ = opener.img_max_;
-function z__() {
-	src_ = o_e__("i" + i_).title;
-	img_.src = src_;
-	r1__(r_ = 0);
-	document.title = src_ + " (" + i_ + " / " + max_ + ") " + old_key_;
+var i_ = <%让我得参%>;
+function max__() {
+	return opener.img_max_;
 }
+
 function w_h__(w, h) {
 	e_.style.maxWidth = null;
 	e_.style.width = w;
 	e_.style.height = h;
 }
+
+function z__() {
+	if(i_ < 1)
+		i_ = max__();
+	else if(i_ > max__())
+		i_ = 1;
+	var e = o_e__("i" + i_);
+	if(!e) {
+		old_key__();
+		return;
+	}
+	src_ = e.value;
+	img_.src = src_;
+	r_ = 0; sx_ = sy_ = fx_ = 1;
+	transform__();
+	title__();
+}
+function title__() {
+	e__("title").innerHTML = i_ + " " + max__() + "<br>" + old_key_ + " " + r_;
+}
+var r_, sx_, sy_, fx_;
+function transform__() {
+	e_.style.transform = "rotate(" + r_ + "deg)scale(" + (fx_ * sx_) + "," + sy_ + ")";
+}
 function s__(s) {
-	w_h__((img_.width * s) + "px", (img_.height * s) + "px");
+	sx_ = sy_ = s; transform__();
 }
-function r1__(r) {
-	e_.style.transform = "rotate(" + r + "deg)";
-}
-var r_;
 function r__() {
-	r1__(r_ += 45);
+	r_ += 15; transform__(); title__();
+}
+function rz__() {
+	r_ -= 15; transform__(); title__();
+}
+function f__() {
+	fx_ = fx_ == 1 ? -1 : 1; transform__();
 }
 function first__() {
 	i_ = 1; z__();
 }
 function back__() {
+	old_key_ = "B";
 	i_--; z__();
 }
 function next__() {
+	old_key_ = "N";
 	i_++; z__();
 }
 function end__() {
-	i_ = max_; z__();
+	i_ = max__(); z__();
 }
 function rand__() {
-	i_ = Math.floor(Math.random() * max_) + 1; z__();
+	old_key_ = "R";
+	i_ = Math.floor(Math.random() * max__()) + 1; z__();
+}
+function old_key__() {
+	switch(old_key_) {
+	case "B":
+		back__();
+		break;
+	default:
+		next__();
+		break;
+	}
+}
+function set_change__() {
+	opener.set_change__(function(s) {
+		opener.set_change__(null);
+		focus__(s);
+		old_key__();
+	});
+	opener.sel_all__(false);
+	o_e__("i" + i_).checked = true;
+}
+function mv__() {
+	set_change__();
+	opener.mv__();
+}
+function rm__() {
+	set_change__();
+	opener.rm__();
 }
 function quit__() {
 	window.close();
+}
+function kao__() {
+	var s = e__("bar").style;
+	if(s.left == "0px") {
+		s.right = "0px";
+		s.left = null;
+		e__("kao").innerHTML = "左";
+	} else {
+		s.left = "0px";
+		s.right = null;
+		e__("kao").innerHTML = "右";
+	}
 }
 var old_key_ = "N";
 window.document.onkeydown = function(evt) {
@@ -73,33 +138,31 @@ window.document.onkeydown = function(evt) {
 		first__();
 		break;
 	case "B":
-		old_key_ = s;
 		back__();
 		break;
 	case "N":
-		old_key_ = s;
 		next__();
 		break;
 	case "E":
 		end__();
 		break;
 	case "R":
-		old_key_ = s;
 		rand__();
 		break;
 	case "X":
 		r__();
 		break;
+	case "Z":
+		rz__();
+		break;
 	case "Q":
 		quit__();
-		break;
-	default:
-		alert(s);
 		break;
 	}
 };
 </script>
-<div id=bar>
+<div id=bar style="left:0px">
+<div id=title></div>
 <%
 定义加以下代码
 	“<a href="javascript:‘参数1’"><div class=btn>‘参数2’</div></a>”
@@ -113,8 +176,13 @@ window.document.onkeydown = function(evt) {
 加s__(1)、“1 : 1”。
 加s__(2)、“1 : 2”。
 加s__(0.5)、“1 : 0.5”。
-加r__()、旋转X。
+加r__()、右旋转X。
+加rz__()、左旋转Z。
+加f__()、水平翻转。
+加mv__()、移动。
+加rm__()、“删除”。
 加quit__()、“结束Q”。
+加kao__()、“靠<span id=kao>右</span>”。
 删除“加”。
 %>
 </div>

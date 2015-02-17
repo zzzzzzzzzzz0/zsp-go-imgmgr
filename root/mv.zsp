@@ -3,33 +3,63 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script src="1.js"></script>
 <script>
+var opener_;
+function set_opener__(o) {
+	opener_ = o;
+	opener_.set_mv__(function(s) {
+		focus__("");
+		e__("tags").innerHTML = s;
+	}, set_opener__);
+}
+
 function submit__(f) {
 	var dir = f.dir.value;
-	if(dir) {
-		exec__("mv -n " + o_e__("tags").value + ' "' + dir + '"', function(ret) {
-			if(ret != "") {
-				alert("移动出错");
-			} else {
-				//opener.location.reload();
-				opener.rm_sel__();
-				window.close();
+	if(!dir) {
+		var dirs = e_n__("dir");
+		for(var i = 0; i < dirs.length; i++) {
+			var d = dirs[i];
+			if(d.checked) {
+				dir = d.value;
+				break;
 			}
-		});
+		}
+	}
+	if(dir) {
+		var tags = e__("tags").innerHTML;
+		if(tags != "") {
+			exec__("mv -n " + tags + ' "' + dir + '"', function(ret) {
+				if(ret != "") {
+					alert("移动出错");
+				} else {
+					e__("tags").innerHTML = "";
+					opener_.change__("mv");
+					opener_.rm_sel__();
+				}
+			});
+		}
 	}
 	return false;
 }
+set_opener__(opener);
+window.onunload = function() {
+	opener_.set_mv__(null, null);
+};
 </script>
 <style>
 #dirs {
+	word-break:break-all;
 	border:1px dashed #000;
+	top:0;
 	position:absolute;
-	right:0px;
+	right:0;
 	width:50%;
 }
 #tag {
+	word-break:break-all;
 	border:1px dashed #000;
+	top:0;
 	position:fixed;
-	left:0px;
+	left:0;
 	width:49%;
 }
 </style>
@@ -61,6 +91,6 @@ function submit__(f) {
 %>
 </div>
 </form>
-<script>e__("tags").innerHTML = o_e__("tags").value;</script>
+<script>e__("tags").innerHTML = opener_.tags_;</script>
 </body>
 </html>

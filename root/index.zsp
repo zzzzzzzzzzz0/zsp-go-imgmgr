@@ -10,7 +10,7 @@ function zhugeshow__() {
 		var img = imgs[i];
 		var y = img.offsetTop;
 		if(y + img.height >= y1 && y <= y2) {
-			img.src = img.parentNode.parentNode.parentNode.title;
+			img.src = img.title;
 		}
 	}
 }
@@ -19,7 +19,7 @@ window.onload = zhugeshow__;
 
 function for_tag__(f, all) {
 	var tags = e_cn__("tag");
-	for(var i = 0; i < tags.length; i++) {
+	for(var i = tags.length; --i >= 0;) {
 		var tag = tags[i];
 		if(tag.checked || all) {
 			f(tag);
@@ -31,16 +31,62 @@ function tag__() {
 	for_tag__(function(tag) {
 		if(s != "")
 			s += " ";
-		s += '"' + tag.nextSibling.title + '"';
+		s += '"' + tag.value + '"';
 	});
 	return s;
 }
+
+var change_;
+function set_change__(change) {
+	change_ = change;
+}
+function change__(s) {
+	if(change_) {
+		change_(s);
+		return;
+	}
+}
+
+var mv_, set_mv_opener_;
+function set_mv__(mv, set_mv_opener) {
+	if(opener) {
+		opener.mv_ = mv;
+		opener.set_mv_opener_ = set_mv_opener;
+	}
+	mv_ = mv;
+	set_mv_opener_ = set_mv_opener;
+}
+function get_mv__(o) {
+	if(mv_) {
+		set_mv_opener_(o);
+		return mv_;
+	}
+	if(opener && opener.mv_) {
+		opener.set_mv_opener_(o);
+		return opener.mv_;
+	}
+	return null;
+}
+
+var tags_;
 function mv__() {
 	var s = tag__();
 	if(s == "")
 		return;
-	e__("tags").value = s;
+	tags_ = s;
+	mv = get_mv__(window);
+	if(mv) {
+		mv(s);
+		return;
+	}
 	window.open("mv.zsp");
+}
+function mv2__() {
+	set_change__(function(s) {
+		set_change__(null);
+		focus__(s);
+	});
+	mv__();
 }
 function rm__() {
 	var s = tag__();
@@ -54,6 +100,7 @@ function rm__() {
 			return;
 		}
 		rm_sel__();
+		change__("rm");
 	});
 }
 function rm_sel__() {
@@ -63,16 +110,21 @@ function rm_sel__() {
 	});
 	zhugeshow__();
 }
-function sel_all__(all) {
+function sel_all__(b) {
 	for_tag__(function(tag) {
-		tag.checked = all ? true : !tag.checked;
+		tag.checked = b;
+	}, true);
+}
+function sel_no__() {
+	for_tag__(function(tag) {
+		tag.checked = !tag.checked;
 	}, true);
 }
 </script>
 <%
 赋予列目录以让我得参、ls。
 
-赋予图宽以200。
+赋予图宽以160。
 赋予框宽以1。
 赋予1宽以算术‘图宽’ + ‘框宽’ * 2。
 “<style>
@@ -113,11 +165,10 @@ img {
 </head>
 <body>
 <div id=bar>
-<input type=hidden id=tags>
-<a href="javascript:mv__()">移动</a> 
+<a href="javascript:mv2__()">移动</a> 
 <a href="javascript:rm__()">删除</a> 
 <a href="javascript:sel_all__(true)">全选</a> 
-<a href="javascript:sel_all__(false)">反选</a> 
+<a href="javascript:sel_no__()">反选</a> 
 <a href="other.zsp">other</a> 
 </div>
 <%
@@ -129,8 +180,8 @@ img {
 	如果不存在其他那么赋予其他以。
 	
 	换行“<div class=item>
-	<input type=checkbox class=tag>
-	<a href="‘目标’" target=_blank title="‘路径’" ‘其他’>
+	<input type=checkbox class=tag value="‘路径’" ‘其他’>
+	<a href="‘目标’" target=_blank>
 	<div class=item-1><div class=item-2>
 	‘内容’
 	</div></div>
@@ -149,7 +200,7 @@ img {
 定义加图片项以下代码
 	别名路径以参数1。
 	赋予图片项号【此】以算术‘图片项号’+1。
-	加链接show.zsp?‘图片项号’、‘路径’、“<img src="no.png">”、id=i‘图片项号’。
+	加链接show.zsp?‘图片项号’、‘路径’、“<img src="no.png" title="‘路径’">”、id=i‘图片项号’。
 上代码。
 
 如果‘列目录’那么先
@@ -191,6 +242,6 @@ img {
 	了。
 了。
 %>
-<script>var img_max_ = <%‘图片项号’%></script>
+<script>var img_max_ = <%‘图片项号’%>;</script>
 </body>
 </html>
