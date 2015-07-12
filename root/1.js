@@ -14,22 +14,61 @@ function o_e__(s) {
 	return opener.document.getElementById(s);
 }
 
-function focus__(s) {
-	alert(s + " 哈");
-	
-	//window.focus();
-
-	/*setTimeout(window.focus, 300);
-	window.blur();*/
+function new__(s) {
+	return document.createElement(s);
+}
+function add__(e, e2) {
+	e2.appendChild(e); 
 }
 
-function exec__(s, f) {
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-		if(xhr.readyState == 4 && xhr.status == 200) {
-			f(xhr.responseText);
+function url__(s) {
+	return encodeURIComponent(s);
+}
+
+function log__(s) {
+	console.log(s);
+}
+
+function focus__(w, s) {
+	log__(w.location.href);
+
+	w.focus();
+
+	w.blur();
+	w.setTimeout(w.focus, 0);
+
+	alert(s + " 哈");
+}
+
+function msg__(s) {
+	if(!("Notification" in window)) {
+		alert(s);
+		return;
+	}
+	if(Notification.permission === "granted") {
+		new Notification(s);
+		return;
+	}
+	if(Notification.permission !== "denied") {
+		Notification.requestPermission(function(permission) {
+			if(permission === "granted") {
+				new Notification(s);
+			} else {
+				alert(s);
+			}
+		});
+	}
+}
+
+function ajax__(s, f, o) {
+	var hr = new XMLHttpRequest();
+	if(f) {
+		hr.onreadystatechange = function() {
+			if(hr.readyState == 4 && hr.status == 200) {
+				f(hr.responseText, o);
+			}
 		}
 	}
-	xhr.open("GET", "exec.zsp?" + s, true);
-	xhr.send();
+	hr.open("GET", s, true);
+	hr.send();
 }

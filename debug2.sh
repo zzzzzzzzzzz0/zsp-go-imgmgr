@@ -1,5 +1,5 @@
 #!/bin/bash
-cd `dirname $0`/root
-../bin/zsp \
+cd `dirname $0`
+./init.zs \
 -zhscript-o-ansi \
----- -r $PWD/ -a :4001 "$@"
+"$@"

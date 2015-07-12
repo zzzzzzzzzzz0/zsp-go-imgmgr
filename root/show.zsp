@@ -2,8 +2,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script src="1.js"></script>
+<style type="text/css">@import url(1.css);</style>
 <style>
-body {margin:0; padding:0;}
+body {margin:0; padding:0; background:url(<%‘bg.png’%>);}
 #img-1 {text-align:center;}
 #bar {
 	position:fixed;
@@ -14,52 +15,92 @@ body {margin:0; padding:0;}
 	background-color:rgba(255, 255, 255, 0.65);
 	text-align:center;
 }
-.btn {padding:3;}
+#bar2 {
+	position:fixed;
+	bottom:0;
+	left:0;
+	z-index:1;
+	background-color:rgba(255, 255, 255, 0.65);
+	font-size:11px;
+}
+.btn {padding:0 0 3 0;}
 </style>
 </head>
 <body>
 <script>
-var i_ = <%让我得参%>;
+var i_ = <%我的参%>;
 function max__() {
 	return opener.img_max_;
 }
 
 function w_h__(w, h) {
-	e_.style.maxWidth = null;
-	e_.style.width = w;
-	e_.style.height = h;
+	img_.style.maxWidth = null;
+	img_.style.width = w;
+	img_.style.height = h;
 }
 
 function z__() {
 	if(i_ < 1)
-		i_ = max__();
-	else if(i_ > max__())
 		i_ = 1;
+	else if(i_ > max__())
+		i_ = max__();
 	var e = o_e__("i" + i_);
 	if(!e) {
 		old_key__();
 		return;
 	}
 	src_ = e.value;
-	img_.src = src_;
-	r_ = 0; sx_ = sy_ = fx_ = 1;
+	img1_.src = src_;
+	img_1_.style.marginTop = 0;
+	r_ = 0; s_ = sx_ = sy_ = fx_ = 1;
 	transform__();
 	title__();
 }
+function z2__() {
+	img_.src = img1_.src;
+	w_h__(null, null);
+	if(img1_.height > document.body.clientHeight) {
+		img_.style.maxWidth = "auto";
+		img_.style.height = "100%";
+	}
+	else if(img1_.width > document.body.clientWidth) {
+		img_.style.maxWidth = "100%";
+		img_.style.height = "auto";
+	}
+}
 function title__() {
-	e__("title").innerHTML = i_ + " " + max__() + "<br>" + old_key_ + " " + r_;
+	e__("title").innerHTML =
+		old_key_ + " " +
+		i_ + ".." + max__() + " " +
+		r_ + " " +
+		//img1_.width + "x" + img1_.height + " " +
+		//img_.width + "x" + img_.height + " " +
+		src_;
 }
-var r_, sx_, sy_, fx_;
+var r_, s_, sx_, sy_, fx_;
 function transform__() {
-	e_.style.transform = "rotate(" + r_ + "deg)scale(" + (fx_ * sx_) + "," + sy_ + ")";
+	img_.style.webkitTransform = img_.style.transform = 
+		"rotate(" + r_ + "deg)scale(" + (fx_ * sx_) + "," + sy_ + ")";
 }
-function s__(s) {
+/*function s__(s) {
 	sx_ = sy_ = s; transform__();
+}*/
+function w_h_s__() {
+	w_h__(img1_.width * s_, img1_.height * s_);
+}
+function s1__() {
+	s_ = 1; w_h_s__();
+}
+function s__() {
+	s_ += 0.01; w_h_s__();
+}
+function ss__() {
+	s_ -= 0.01; w_h_s__();
 }
 function r__() {
 	r_ += 15; transform__(); title__();
 }
-function rz__() {
+function rr__() {
 	r_ -= 15; transform__(); title__();
 }
 function f__() {
@@ -69,18 +110,15 @@ function first__() {
 	i_ = 1; z__();
 }
 function back__() {
-	old_key_ = "B";
 	i_--; z__();
 }
 function next__() {
-	old_key_ = "N";
 	i_++; z__();
 }
 function end__() {
 	i_ = max__(); z__();
 }
 function rand__() {
-	old_key_ = "R";
 	i_ = Math.floor(Math.random() * max__()) + 1; z__();
 }
 function old_key__() {
@@ -91,13 +129,19 @@ function old_key__() {
 	default:
 		next__();
 		break;
+	case "R":
+		rand__();
+		break;
 	}
 }
-function set_change__() {
+function set_change__(f) {
 	opener.set_change__(function(s) {
 		opener.set_change__(null);
-		focus__(s);
-		old_key__();
+		focus__(window, s);
+		if(old_key_ == "B")
+			back__();
+		else 
+			next__();
 	});
 	opener.sel_all__(false);
 	o_e__("i" + i_).checked = true;
@@ -113,6 +157,34 @@ function rm__() {
 function quit__() {
 	window.close();
 }
+function fs__() {
+	if(document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen) {
+		var de = document;
+		if (de.exitFullscreen) {
+			de.exitFullscreen();
+		} else if (de.mozCancelFullScreen) {
+			de.mozCancelFullScreen();
+		} else if (de.webkitCancelFullScreen) {
+			de.webkitCancelFullScreen();
+		}
+	} else {
+		var de = document.documentElement;
+		if (de.requestFullscreen) {
+			de.requestFullscreen();
+		} else if (de.mozRequestFullScreen) {
+			de.mozRequestFullScreen();
+		} else if (de.webkitRequestFullScreen) {
+			de.webkitRequestFullScreen();
+		}
+	}
+}
+function up__(up) {
+	var s = img_1_.style, i = up ? -1 : 1;
+	var i2 = parseInt(s.marginTop);
+	if(!i2)
+		i2 = 0;
+	s.marginTop = i2 + i * 10;
+}
 function kao__() {
 	var s = e__("bar").style;
 	if(s.left == "0px") {
@@ -125,15 +197,33 @@ function kao__() {
 		e__("kao").innerHTML = "右";
 	}
 }
+function bar_hide__() {
+	var bar = e__("bar").style, bar2 = e__("bar2").style;
+	if(bar.display != "none") {
+		bar.display = "none";
+		return;
+	}
+	if(bar2.display != "none") {
+		bar2.display = "none";
+		return;
+	}
+	bar.display = bar2.display = "block";
+}
 var old_key_ = "N";
 window.document.onkeydown = function(evt) {
-	var s = String.fromCharCode(evt.keyCode);
-	switch(s) {
+	var key = String.fromCharCode(evt.keyCode);
+	switch(key) {
+	case "B":
+	case "N":
+	case "R":
+	case "E":
+		old_key_ = key;
+		break;
 	case " ":
-		s = old_key_;
+		key = old_key_;
 		break;
 	}
-	switch(s) {
+	switch(key) {
 	case "F":
 		first__();
 		break;
@@ -149,60 +239,76 @@ window.document.onkeydown = function(evt) {
 	case "R":
 		rand__();
 		break;
+	case "1":
+		s1__();
+		break;
+	case "D":
+		s__();
+		break;
+	case "S":
+		ss__();
+		break;
 	case "X":
 		r__();
 		break;
 	case "Z":
-		rz__();
+		rr__();
 		break;
 	case "Q":
 		quit__();
+		break;
+	case "H":
+		bar_hide__();
+		break;
+	case "O":
+		up__(true);
+		break;
+	case "P":
+		up__(false);
 		break;
 	}
 };
 </script>
 <div id=bar style="left:0px">
-<div id=title></div>
 <%
-定义加以下代码
-	“<a href="javascript:‘参数1’"><div class=btn>‘参数2’</div></a>”
+定义加、代码、文以下代码
+	“<div class=btn>”。
+	“<a href="javascript:‘代码’">‘文’</a>”。
+	</div>。
 上代码。
 加first__()、“第一页F”。
 加back__()、“上一页B”。
 加next__()、“下一页N”。
 加end__()、“最后页E”。
 加rand__()、“随机页R”。
-加z__()、刷新。
-加s__(1)、“1 : 1”。
-加s__(2)、“1 : 2”。
-加s__(0.5)、“1 : 0.5”。
+加z__();z2__()、刷新。
+加s1__()、“1 : 1”。
+加s__()、放大D。
+加ss__()、缩小S。
 加r__()、右旋转X。
-加rz__()、左旋转Z。
+加rr__()、左旋转Z。
 加f__()、水平翻转。
+加up__(true)、上调O。
+加up__(false)、下调P。
+加fs__()、“全屏”。
 加mv__()、移动。
 加rm__()、“删除”。
-加quit__()、“结束Q”。
 加kao__()、“靠<span id=kao>右</span>”。
+加bar_hide__()、隐藏H。
+加quit__()、“结束Q”。
+加location.reload()、刷新。
 删除“加”。
 %>
+空格 再
 </div>
+<div id=bar2><div id=title></div></div>
 <div id=img-1><img id=img></div>
 <script>
 var src_;
-var img_ = new Image();
-var e_ = e__("img");
-img_.onload = function() {
-	e_.src = img_.src;
-	w_h__(null, null);
-	if(img_.width > document.body.clientWidth) {
-		e_.style.maxWidth = "100%";
-		e_.style.height = "auto";
-	}
-	if(img_.height > document.body.clientHeight) {
-		e_.style.maxWidth = "auto";
-		e_.style.height = "100%";
-	}
-};
+var img1_ = new Image();
+var img_ = e__("img");
+img1_.onload = z2__;
+var img_1_ = e__("img-1");
 z__();
 </script>
 </body>

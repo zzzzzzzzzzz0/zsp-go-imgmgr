@@ -1,0 +1,23 @@
+var int_i_ = 1, int_max_ = <%‘号’%>;
+var int_old_line_;
+var int_ = setInterval(function() {
+	var url = "exec.zsp?c=文件&s=<%‘背后’%>" + int_i_;
+	ajax__(url, function(line) {
+		//z$("显示“"+url+" "+line+"”换行");
+		if("" == line || int_old_line_ == line)
+			return;
+		int_old_line_ = line;
+
+		var o = eval(line);
+		switch(o.type) {
+		case "x":
+			log__("<%‘背后’%>" + int_i_);
+			if(++int_i_ >= int_max_)
+				clearInterval(int_);
+			else
+				int_old_line_ = undefined;
+			break;
+		}
+		<%‘参数1’%>
+	});
+}, 50);

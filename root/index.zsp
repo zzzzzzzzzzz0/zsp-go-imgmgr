@@ -1,22 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="zhugeshow.js"></script>
 <script src="1.js"></script>
+<style type="text/css">@import url(1.css);</style>
 <script>
-function zhugeshow__() {
-	var y1 = document.body.scrollTop, y2 = y1 + document.body.clientHeight;
-	var imgs = e_tn__("img");
-	for(var i = 0; i < imgs.length; i++) {
-		var img = imgs[i];
-		var y = img.offsetTop;
-		if(y + img.height >= y1 && y <= y2) {
-			img.src = img.title;
-		}
-	}
-}
-window.onscroll = zhugeshow__;
-window.onload = zhugeshow__;
-
 function for_tag__(f, all) {
 	var tags = e_cn__("tag");
 	for(var i = tags.length; --i >= 0;) {
@@ -26,13 +14,24 @@ function for_tag__(f, all) {
 		}
 	}
 }
-function tag__() {
-	var s = "";
-	for_tag__(function(tag) {
-		if(s != "")
-			s += " ";
-		s += '"' + tag.value + '"';
-	});
+function tag__(type) {
+	var s;
+	switch(type) {
+	case "a":
+		s = new Array();
+		for_tag__(function(tag) {
+			s.push(tag);
+		});
+		break;
+	default:
+		s = "";
+		for_tag__(function(tag) {
+			if(s != "")
+				s += " ";
+			s += '"' + tag.value + '"';
+		});
+		break;
+	}
 	return s;
 }
 
@@ -70,37 +69,74 @@ function get_mv__(o) {
 
 var tags_;
 function mv__() {
-	var s = tag__();
-	if(s == "")
+	var s = tag__("a");
+	if(s.length == 0) {
+		msg__("选");
 		return;
+	}
 	tags_ = s;
 	mv = get_mv__(window);
 	if(mv) {
 		mv(s);
 		return;
 	}
-	window.open("mv.zsp");
+
+	var w = window.open();
+	login__(function(b) {
+		if(!b) {
+			w.close();
+			return;
+		}
+		w.location = "mv.zsp";
+	});
 }
 function mv2__() {
 	set_change__(function(s) {
 		set_change__(null);
-		focus__(s);
+		focus__(window, s);
 	});
 	mv__();
 }
-function rm__() {
-	var s = tag__();
-	if(s == "")
-		return;
-	if(!confirm("删除 " + s + " 吗？"))
-		return
-	exec__("rm -r " + s, function(ret) {
+function login__(f) {
+	ajax__("login.zsp?测", function(ret) {
 		if(ret != "") {
-			alert("删除出错");
+			var pw = prompt(ret + "\n\n操作需要密码：");
+			if(pw != null) {
+				ajax__("login.zsp?pw=" + pw, function(ret) {
+					if(ret != "") {
+						alert("再来吧");
+						f(false);
+						return;
+					}
+					f(true);
+				});
+				return;
+			}
+			f(false);
 			return;
 		}
-		rm_sel__();
-		change__("rm");
+		f(true);
+	});
+}
+function rm__() {
+	var s = tag__();
+	if(s == "") {
+		msg__("选");
+		return;
+	}
+	if(!confirm("删除 " + s + " 吗？"))
+		return;
+	login__(function(b) {
+		if(!b)
+			return;
+		ajax__("exec.zsp?" + url__("rm -r " + s), function(ret) {
+			if(ret != "") {
+				msg__("删除出错");
+				return;
+			}
+			rm_sel__();
+			change__("删除后返回");
+		});
 	});
 }
 function rm_sel__() {
@@ -122,9 +158,9 @@ function sel_no__() {
 }
 </script>
 <%
-赋予列目录以让我得参、ls。
+赋予列目录以我的参、ls。
 
-赋予图宽以160。
+赋予图宽以‘图宽’。
 赋予框宽以1。
 赋予1宽以算术‘图宽’ + ‘框宽’ * 2。
 “<style>
@@ -160,88 +196,97 @@ img {
 	right:0px;
 	background-color:rgba(255, 255, 255, 0.65);
 }
+body {background:url(‘bg.png’);}
 </style>”。
 %>
+<script>
+function add_lnk__(tag, text, path, other) {
+	var d = new__("div");
+	d.className = "item";
+	d.innerHTML = 
+	(path ? '<input type=checkbox class=tag value="' + path + '" ' + other + '>' : '')+
+	'<a href="' + tag + '" target=_blank>' +
+	'<div class=item-1><div class=item-2>' + text + '</div></div></a>';
+	add__(d, e__("list"));
+}
+
+var img_max_ = 0;
+function add_img__(path, alt) {
+	img_max_++;
+	add_lnk__("show.zsp?" + img_max_,
+			'<img src="no.png" src2="' + path + '" title="' + alt + '">',
+			path, "id=i" + img_max_);
+}
+</script>
 </head>
 <body>
 <div id=bar>
 <a href="javascript:mv2__()">移动</a> 
-<a href="javascript:rm__()">删除</a> 
+<a href="javascript:rm__()">删除</a><br>
 <a href="javascript:sel_all__(true)">全选</a> 
-<a href="javascript:sel_no__()">反选</a> 
-<a href="other.zsp">other</a> 
+<a href="javascript:sel_all__(false)">不</a> 
+<a href="javascript:sel_no__()">反选</a><br>
+<a href="javascript:location.reload()">刷新</a> 
+<a href="other.zsp" target=_blank>other</a> 
 </div>
+<div id=list>
+</div>
+<script>
 <%
-定义加链接以下代码
-	别名目标以参数1。
-	别名路径以参数2。
-	别名内容以参数3。
-	别名其他以参数4。
-	如果不存在其他那么赋予其他以。
-	
-	换行“<div class=item>
-	<input type=checkbox class=tag value="‘路径’" ‘其他’>
-	<a href="‘目标’" target=_blank>
-	<div class=item-1><div class=item-2>
-	‘内容’
-	</div></div>
-	</a>
-	</div>”。
-上代码。
-
-定义是图片以下代码
-	别名路径以参数1。
-	赋予果、错以让我重定向输出、file、‘路径’。
-	赋予果、错以让我正则配、‘果’、“JPEG image”、“GIF image”、“PNG image”、“PC bitmap”。
-	如果‘果’那么1。
-上代码。
-
-赋予图片项号【此】以0。
-定义加图片项以下代码
-	别名路径以参数1。
-	赋予图片项号【此】以算术‘图片项号’+1。
-	加链接show.zsp?‘图片项号’、‘路径’、“<img src="no.png" title="‘路径’">”、id=i‘图片项号’。
-上代码。
-
-如果‘列目录’那么先
-	让我遍历目录、‘列目录’、含子目录、下代码
+赋予背后以我的时间、2006-01-02-15-04-05.999999999-。
+定义遍历用代码【无参】以下代码
+	显示“‘背后名’ ‘目录’”换行。
+	如果存在‘背后名’那么我的信道关闭、‘‘背后名’’。
+	下代码
 		别名名以参数1。
-		赋予路径以‘列目录’/‘名’。
-		如果是图片‘路径’那么加图片项‘路径’。
-	上代码。
-了否则先
-	如果不存在图片目录1【顶】那么先
-		如果不存在参数1【上】那么
-			赋予图片目录1【顶】以先让我得环境变量、HOME了/图片
-		否则先
-			赋予号以1。
-			循环先
-				别名图片目录以参数‘号’【上】。
-				如果不存在图片目录那么跳出。
-				赋予图片目录‘号’【顶】以‘图片目录’。
-				赋予号以算术‘号’ + 1。
-			了。
+		赋予路径以“上代码‘目录’下代码”/‘名’。
+		如果‘路径’尾等于/那么先
+			({type:"dir", path:"‘路径’", text:"‘名’"})。
+			再来。
 		了。
+		如果是图片‘路径’那么先
+			赋予标题以我的文件、‘路径’、主名。
+			({type:"img", path:"‘路径’", alt:"‘标题’"})。
+			再来。
+		了。
+	上代码。
+上代码。
+如果‘列目录’那么先
+	定义加目录、目录以下代码
+		赋予背后名以‘背后’‘号’。
+		赋予‘背后名’【主】以我的背后、32、遍历目录、‘目录’、含子目录、遍历用代码。
+	上代码。
+	如果‘列目录’等于all那么先
+		循环号先
+			别名目录以图片目录‘号’【顶】。
+			如果不存在目录那么跳出。
+			加目录‘目录’。
+		了。
+	了否则先
+		赋予号以1。
+		加目录‘列目录’。
 	了。
-	赋予号以1。
-	循环先
-		别名图片目录以图片目录‘号’【顶】。
-		如果不存在图片目录那么跳出。
-		显示‘图片目录’换行。
-		让我遍历目录、‘图片目录’、含子目录、返回目录、仅根文件、下代码
-			别名名以参数1。
-			赋予路径以‘图片目录’/‘名’。
-			如果让我尾匹配、‘名’、/那么
-				加链接?ls=‘路径’、‘路径’、‘名’
-			否则先
-				如果是图片‘路径’那么
-					加图片项‘路径’。
-			了。
-		上代码。
-		赋予号以算术‘号’ + 1。
+了否则先
+	add_lnk__("?ls=all", "所有");。
+	循环号先
+		别名目录以图片目录‘号’【顶】。
+		如果不存在目录那么跳出。
+		赋予背后名以‘背后’‘号’。
+		赋予‘背后名’【主】以我的背后、32、遍历目录、‘目录’、含子目录、返回目录、仅根文件、遍历用代码。
 	了。
 了。
+加载int.zsp、下原样
+switch(o.type) {
+case "dir":
+	add_lnk__("?ls=" + o.path, o.text, o.path, "");
+	break;
+case "img":
+	add_img__(o.path, o.alt);
+	zhugeshow__();
+	break;
+}
+上原样。
 %>
-<script>var img_max_ = <%‘图片项号’%>;</script>
+</script>
 </body>
 </html>
