@@ -214,7 +214,8 @@ var img_max_ = 0;
 function add_img__(path, alt) {
 	img_max_++;
 	add_lnk__("show.zsp?" + img_max_,
-			'<img src="no.png" src2="' + path + '" title="' + alt + '">',
+			<%如果存在nop【主】那么alt
+			否则“'<img src="no.png" src2="' + path + '" title="' + alt + '">'”%>,
 			path, "id=i" + img_max_);
 }
 </script>
