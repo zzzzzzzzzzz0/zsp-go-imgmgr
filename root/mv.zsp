@@ -91,7 +91,8 @@ window.onunload = function() {
 <body>
 <form onsubmit="return submit__(this)">
 <div id=tag>
-<input type=checkbox checked id=rm_sel>移除所选<br>
+<!--checked-->
+<input type=checkbox  id=rm_sel>移除所选<br>
 移动<input type=submit value="mv" onmouseover="mv_=this.value"> |
 复制<input type=submit value="cp" onmouseover="mv_=this.value"> 
 <span id=tags></span> 
@@ -103,14 +104,16 @@ window.onunload = function() {
 定义加钮、路径以下代码
 	“<br><input type=radio name=dir value="‘路径’">‘路径’”。
 上代码。
-循环号先
-	别名图片目录以图片目录‘号’【顶】。
-	如果不存在图片目录那么跳出。
-	加钮‘图片目录’。
-	我的遍历目录、‘图片目录’、含子目录、返回目录、仅目录、下代码
-		加钮‘图片目录’/‘参数1’
-	上代码。
-了。
+我的迭代、下代码
+	循环号先
+		别名图片目录以‘参数1’‘号’【顶】。
+		如果不存在图片目录那么跳出。
+		加钮‘图片目录’。
+		我的遍历目录、‘图片目录’、含子目录、返回目录、仅目录、下代码
+			加钮‘图片目录’/‘参数1’
+		上代码。
+	了。
+上代码、图片目录、移动往。
 加载‘参数0’.setting。
 %>
 </div>

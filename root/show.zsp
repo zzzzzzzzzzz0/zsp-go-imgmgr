@@ -215,7 +215,7 @@ window.document.onkeydown = function(evt) {
 	switch(key) {
 	case "B":
 	case "N":
-	case "R":
+	//case "R":
 	case "E":
 		old_key_ = key;
 		break;
