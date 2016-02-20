@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="1.js"></script>
+<script src="util/1.js"></script>
 <script>
 var opener_;
 function set_opener__(o) {
@@ -44,7 +44,7 @@ function submit__(f) {
 	for(var i = 0; i < len; i++) {
 		var tag = opener_.tags_[i];
 		var s = tag.value;
-		ajax__("exec.zsp?c=" + mv_ + "&s=" + url__(s) + "&d=" + url__(dir), function(ret, tag) {
+		ajax__("util/exec.zsp?c=" + mv_ + "&s=" + url__(s) + "&d=" + url__(dir), function(ret, tag) {
 			var o = eval(ret);
 			if(o.err != "") {
 				msg__(mv_ + " " + o.err + ": " + o.err2 + " 出错");

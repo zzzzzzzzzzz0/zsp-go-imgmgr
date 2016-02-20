@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="1.js"></script>
+<script src="util/1.js"></script>
 <style type="text/css">@import url(1.css);</style>
 <style>
 body {margin:0; padding:0; background:url(<%‘bg.png’%>);}
@@ -215,7 +215,7 @@ window.document.onkeydown = function(evt) {
 	switch(key) {
 	case "B":
 	case "N":
-	//case "R":
+	case "R":
 	case "E":
 		old_key_ = key;
 		break;
@@ -291,15 +291,15 @@ window.document.onkeydown = function(evt) {
 加up__(true)、上调O。
 加up__(false)、下调P。
 加fs__()、“全屏”。
-加mv__()、移动。
-加rm__()、“删除”。
 加kao__()、“靠<span id=kao>右</span>”。
 加bar_hide__()、隐藏H。
-加quit__()、“结束Q”。
 加location.reload()、刷新。
+加mv__()、移动。
+加rm__()、“删除”。
+“空格 再”。
+加quit__()、“结束Q”。
 删除“加”。
 %>
-空格 再
 </div>
 <div id=bar2><div id=title></div></div>
 <div id=img-1><img id=img></div>

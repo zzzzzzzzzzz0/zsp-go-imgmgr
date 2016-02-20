@@ -1,6 +1,6 @@
 #!/bin/bash
 cd `dirname $0`
-./init.zs \
+./init.zsp \
 -zhscript-o-ansi \
 -zhscript-o-args \
 -zhscript-o-tree \

@@ -1,10 +1,10 @@
-<%加载login.zsp%><html>
+<%加载util/login.zsp%><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="1.js"></script>
+<script src="util/1.js"></script>
 <script>
 function z__(s) {
-	ajax__("exec.zsp?" + s, function(ret) {
+	ajax__("util/exec.zsp?" + s, function(ret) {
 		e__("log").innerHTML += s + " " + ret + "<br>";
 	});
 }

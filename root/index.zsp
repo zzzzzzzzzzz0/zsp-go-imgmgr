@@ -1,8 +1,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="zhugeshow.js"></script>
-<script src="1.js"></script>
+<script src="util/zhugeshow.js"></script>
+<script src="util/1.js"></script>
 <style type="text/css">@import url(1.css);</style>
 <script>
 function for_tag__(f, all) {
@@ -98,11 +98,11 @@ function mv2__() {
 	mv__();
 }
 function login__(f) {
-	ajax__("login.zsp?测", function(ret) {
+	ajax__("util/login.zsp?测", function(ret) {
 		if(ret != "") {
 			var pw = prompt(ret + "\n\n操作需要密码：");
 			if(pw != null) {
-				ajax__("login.zsp?pw=" + pw, function(ret) {
+				ajax__("util/login.zsp?pw=" + pw, function(ret) {
 					if(ret != "") {
 						alert("再来吧");
 						f(false);
@@ -129,7 +129,7 @@ function rm__() {
 	login__(function(b) {
 		if(!b)
 			return;
-		ajax__("exec.zsp?" + url__("rm -r " + s), function(ret) {
+		ajax__("util/exec.zsp?" + url__("rm -r " + s), function(ret) {
 			if(ret != "") {
 				msg__("删除出错");
 				return;
@@ -214,7 +214,7 @@ var img_max_ = 0;
 function add_img__(path, alt) {
 	img_max_++;
 	add_lnk__("show.zsp?" + img_max_,
-			<%如果存在nop【主】那么alt
+			<%如果存在nop【顶】那么alt
 			否则“'<img src="no.png" src2="' + path + '" title="' + alt + '">'”%>,
 			path, "id=i" + img_max_);
 }
@@ -236,12 +236,12 @@ function add_img__(path, alt) {
 <%
 赋予背后以我的时间、2006-01-02-15-04-05.999999999。
 定义遍历用代码【无参】以下代码
-	显示“‘背后名’ ‘目录’”换行。
-	如果存在‘背后名’那么我的信道关闭、‘‘背后名’’。
+	显示始--‘背后名’--‘目录’换行。
 	下代码
+		我的等待、20。
 		别名名以参数1。
 		赋予路径以“上代码‘目录’下代码”/‘名’。
-		如果‘路径’尾等于/那么先
+		如果‘名’尾等于/那么先
 			({type:"dir", path:"‘路径’", text:"‘名’"})。
 			再来。
 		了。
@@ -255,7 +255,7 @@ function add_img__(path, alt) {
 如果‘列目录’那么先
 	定义加目录、目录以下代码
 		赋予背后名以‘背后’‘号’。
-		赋予‘背后名’【主】以我的背后、32、遍历目录、‘目录’、含子目录、遍历用代码。
+		赋予‘背后名’【顶】以我的背后、32、遍历目录、‘目录’、含子目录、遍历用代码。
 	上代码。
 	如果‘列目录’等于all那么先
 		循环号先
@@ -273,10 +273,10 @@ function add_img__(path, alt) {
 		别名目录以图片目录‘号’【顶】。
 		如果不存在目录那么跳出。
 		赋予背后名以‘背后’‘号’。
-		赋予‘背后名’【主】以我的背后、32、遍历目录、‘目录’、含子目录、返回目录、仅根文件、遍历用代码。
+		赋予‘背后名’【顶】以我的背后、32、遍历目录、‘目录’、含子目录、返回目录、仅根文件、遍历用代码。
 	了。
 了。
-加载int.zsp、下原样
+加载util/int.zsp、下原样
 switch(o.type) {
 case "dir":
 	add_lnk__("?ls=" + o.path, o.text, o.path, "");
@@ -286,7 +286,7 @@ case "img":
 	zhugeshow__();
 	break;
 }
-上原样。
+上原样、200。
 %>
 </script>
 </body>
